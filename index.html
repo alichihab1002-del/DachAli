@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DachAli</title>
+<style>
+body{
+  margin:0;
+  overflow:hidden;
+  background:black;
+}
+#player{
+  width:40px;
+  height:40px;
+  background:cyan;
+  position:absolute;
+  bottom:0;
+  left:60px;
+}
+.obstacle{
+  width:25px;
+  height:50px;
+  background:red;
+  position:absolute;
+  bottom:0;
+  right:-50px;
+}
+</style>
+</head>
+<body>
+
+<div id="player"></div>
+<div class="obstacle" id="obs"></div>
+
+<script>
+let player = document.getElementById("player");
+let obs = document.getElementById("obs");
+let jumping = false;
+let position = 0;
+
+document.body.onclick = function(){
+  if(!jumping){
+    jumping = true;
+    let up = setInterval(()=>{
+      if(position >= 150){
+        clearInterval(up);
+        let down = setInterval(()=>{
+          if(position <= 0){
+            clearInterval(down);
+            jumping = false;
+          }
+          position -=5;
+          player.style.bottom = position + "px";
+        },20);
+      }
+      position +=5;
+      player.style.bottom = position + "px";
+    },20);
+  }
+};
+
+let move = setInterval(()=>{
+  let obsRight = parseInt(window.getComputedStyle(obs).getPropertyValue("right"));
+  obs.style.right = obsRight + 6 + "px";
+
+  if(obsRight > window.innerWidth){
+    obs.style.right = "-50px";
+  }
+
+  if(obsRight > window.innerWidth-120 && position < 40){
+    alert("Game Over!");
+    location.reload();
+  }
+},20);
+</script>
+
+</body>
+</html>
